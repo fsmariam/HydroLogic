@@ -10,5 +10,78 @@ Despite significant efforts, many communities in Tanzania still face challenges 
 # Project Goal
 The primary objective of this project is to develop machine learning models capable of predicting the functionality status of water pumps across Tanzania. By analyzing various factors such as location, water quality, management structures, and technical specifications, the project aims to identify which pumps are functional, which require repairs, and which are non-functional. This predictive capability will enhance maintenance operations, ensure better resource distribution, and ultimately improve access to clean water for communities.
 
+# Coding Stundards
+
+Choose a consistent naming style that is self explanatory.
+
+#### 1. Variables & Function Names
+
+__Naming Style__	 ---     __Example__	        ---          __Use Case__
+
+
+snake_case	---        train_model()	     ---      ✅ Python functions, variables
+
+PascalCase	 ---       WaterPumpClassifier	---     ✅ Class names
+
+camelCase	    ---      getData()	      ---         ❌ Avoid in Python, used in JavaScript
+
+#### 2. Constants (ALL_CAPS)
+✅ Use uppercase with underscores for constants:
+
+MAX_ITERATIONS = 1000
+
+DATASET_PATH = "data/raw/water_pumps.csv"
+
+
+#### 3. Filenames
+✅ Use descriptive, lowercase filenames with underscores
+
+❌ Avoid spaces, special characters, or mixed cases
+
+__Good Filenames:__
+
+train_model.py
+
+preprocess_data.py
+
+__Bad Filenames:__
+
+TrainModel.py  # Wrong capitalization  
+
+preprocessData.py  # CamelCase (not recommended)  
+
+evaluate results.py  # Spaces (avoid this) 
+
+#### 4. Directory Naming:
+
+✅ Use lowercase, plural names
+
+✅ Use underscores (_) if needed:
+
+data/
+
+notebooks/
+
+models/
+
+results/
+
+❌ Avoid CamelCase or spaces:
+
+Data/    
+NotebookFiles/  
+
+#### 5. Git Branch Naming:
+
+✅ Use a structured format like:
+
+feature/add-preprocessing
+
+bugfix/fix-missing-values
+
+Example: git checkout -b feature/train-waterpump-model
+
+# Project Structure
+
 # References
 https://design.maji.go.tz/index.php/Chapter_One%3AIntroduction_VOL1?utm_source=chatgpt.com
