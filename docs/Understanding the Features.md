@@ -37,4 +37,52 @@ This flips the interpretation: _amount_tsh = 0 doesn't mean "data missing" — i
 amount_tsh = 0: 41,639 rows → majority
 amount_tsh > 0: ~17,761 rows → minority, but significant enough to keep as numeric range of non-zero values goes up to 350,000
 ```
+__How to handle?__
+- 1. Use It as a Continuous Feature
 
+- But log-transform it — this kind of data is usually very skewed (long tail with a few huge values like 350,000).
+import numpy as np
+```
+df['amount_tsh_log'] = df['amount_tsh'].replace(0, 1)  # avoid log(0)
+df['amount_tsh_log'] = np.log(df['amount_tsh_log'])
+```
+- This transformation makes the distribution more normal
+- Keeps relative differences (e.g. 1000 is more than 10, but now on a compressed scale)
+2. Still Keep a Binary Indicator
+
+Because amount_tsh = 0 could still signal low-tech systems, which could affect pump reliability differently.
+```
+df['has_static_head'] = (df['amount_tsh'] > 0).astype(int)
+```
+🎯 __Why This Dual Approach Helps__
+```
+Feature	Meaning	Use in model
+has_static_head	Whether the pump is gravity/manual	Categorical (0/1)
+amount_tsh_log	Intensity/scale of water pressure	Continuous (log scale)
+```
+
+This lets the model:
+- Learn differences between manual vs mechanical
+- Also consider how powerful/heavy-duty the system is
+
+
+### 2. construction_year
+
+- __Problem:__ 20,709 out of 59,400 are 0 → effectively missing (~35%)
+- 0 is not a real year → needs to be treated as missing
+- When valid, it can be used to calculate pump_age: 
+```
+# Mark 0s as NaN for construction_year
+df['construction_year'] = df['construction_year'].replace(0, np.nan)
+
+# Extract year from date_recorded
+df['recorded_year'] = pd.to_datetime(df['date_recorded']).dt.year
+
+# Compute age (where we have data)
+df['pump_age'] = df['recorded_year'] - df['construction_year']
+```
+__What to do with missing pump_age?__
+
+- Option 1: Impute (e.g. median pump_age by region or waterpoint_type)
+- Option 2: Add a binary flag missing_age
+- Option 3: Leave as NaN if the model handles it (e.g. XGBoost, CatBoost)
