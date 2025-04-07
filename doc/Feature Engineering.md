@@ -12,32 +12,52 @@ In this dataset there are two types of null values: missing values and 0 values 
  - population: 21381 rows
  - construction_year: 20302
  - water_quality, quality_group: unknown as value
- 
  - gps_height: 20438
- - latitude & longtitude: 1812 
+
+- Num_private: 58643 (Can be dropped as over 90% are 0s)
+ 
+- **amount_tsh: 41639** (The 0s here don't seem to be showing missing values, just shows the feature is not relevant, so might not need imputation or dropping, probably only encoding could be better.)
+
+#### Convert Categoricals: Convert categorical columns (e.g., 'scheme_management') into numerical encodings using label/one-hot techniques.
+
+  - Recorded_by has only one value for all and doesn't add anything to data, so can be dropped
+  - scheme_name: Missing 28810 (49%), Distinct 2695 (5%)
+  - scheme_management: Missing 3878 (7%), Distinct 11 (<1%)
+  - waterpoint_type and waterpoint_type_group are very similar, waterpoint_type_group can be kept as the other has duplicate values.
+  - extraction_type is duplicate of extraction_type_group, extraction_type_class is also very similar  
+  - management and management_group seem very related to each other 
+  - payment and payment_type are exactly the same
+  - water_quality and quality_group are also similar
+  - quantity has a duplicate quantity_group, one needs to be dropped.
+  - source and source_type are also similar with little differences, source_class a general class
+  - wpt_name: Missing 2 (<1%), Distinct 37399 (63%)
+  - installer: Missing 3655 (6%), Distinct 2145 (4%)
+  - funder: Missing 3637 (6%), Distinct 1896 (3%)
+    
+__Geographic features:__
+
+- ward: 2092 Distinct values/ cat
+- lga: 125 Distinct values/ cat
+- Region (21) and Region_code (27 categories) are very similar, we could use Region_code for machine learning and drop Region then. district_code is closely is more general code for region (20 categories).
+- subvillage: Missing 371 (<1%), Distinct 19287 (32%)
+- basin: 9 Distinct values/ cat.
+- latitude & longtitude: 1812 
 ```
 Latitude and Longtitude have 0 values for the following features:
 region_code: (11(3), 17(1057) and 19(752) and
 district_code (1(1057), 2(264) and 6(488))) 
 ```
-- Num_private: 58643 (Can be dropped as over 90% are 0s)
-- **amount_tsh: 41639** (The 0s here don't seem to be showing missing values, just shows the feature is not relevant, so might not need imputation or dropping, probably only encoding could be better.)
 
-#### Convert Categoricals: Convert categorical columns (e.g., 'scheme_management') into numerical encodings using label/one-hot techniques.
-  - Recorded_by has only one value for all and doesn't add anything to data, so can be dropped
-  - Region and Region_code are the same, we could use Region_code for machine learning and drop Region then
-  - quantity has a duplicate quantity_group, one needs to be dropped.
-  - waterpoint_type and waterpoint_type_group are very similar, waterpoint_type_group can be kept as the other has duplicate values.
-  - extraction_type and extraction_type_group are also very similar
-  - water_quality and quality_group are also similar
-  - payment and payment_type are exactly the same
-
+==========
+- permit: has True/False values (no missing values)
+- public_meeting: has True/False values (692 missing values)
 
 #### Data Transformation:
 
 #### Standardize/Normalize: Apply standardization on location coordinates and static head (amount_tsh) to scale their values appropriately.
 
 #### Datetime Handling: Convert 'date_recorded' to a datetime format or extract year/month for use in models.
+- date_recorded: type Object, correct type Date and time
 
 #### Feature Selection:
 
